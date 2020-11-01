@@ -1,8 +1,7 @@
-package com.project.kuzmichev.model.service.ad;
+package com.project.kuzmichev.service.ad;
 
 import com.project.kuzmichev.model.domain.ad.Ad;
 import com.project.kuzmichev.model.domain.ad.AdStatus;
-import com.project.kuzmichev.model.domain.user.User;
 import com.project.kuzmichev.model.repository.AdRepository;
 import com.project.kuzmichev.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 @Service
 public class AdServiceImpl implements AdService {
 

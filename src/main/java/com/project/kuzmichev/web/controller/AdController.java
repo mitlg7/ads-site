@@ -2,7 +2,7 @@ package com.project.kuzmichev.web.controller;
 
 
 import com.project.kuzmichev.model.domain.ad.Ad;
-import com.project.kuzmichev.model.service.ad.AdServiceImpl;
+import com.project.kuzmichev.service.ad.AdServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package com.project.kuzmichev.model.service.user;
+package com.project.kuzmichev.service.user;
 
 import com.project.kuzmichev.model.domain.user.User;
 import com.project.kuzmichev.model.domain.user.UserRole;

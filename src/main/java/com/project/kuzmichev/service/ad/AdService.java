@@ -1,4 +1,4 @@
-package com.project.kuzmichev.model.service.ad;
+package com.project.kuzmichev.service.ad;
 
 import com.project.kuzmichev.model.domain.ad.Ad;
 import com.project.kuzmichev.model.domain.ad.AdStatus;

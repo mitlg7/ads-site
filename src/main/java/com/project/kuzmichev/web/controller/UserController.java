@@ -1,7 +1,7 @@
 package com.project.kuzmichev.web.controller;
 
 import com.project.kuzmichev.model.domain.user.User;
-import com.project.kuzmichev.model.service.user.UserService;
+import com.project.kuzmichev.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
