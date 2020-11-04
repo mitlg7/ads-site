@@ -16,6 +16,8 @@ public class AdController {
     @Autowired
     private AdServiceImpl adServiceImpl;
 
+
+
     @GetMapping("/{id:\\d+}")
     @ResponseBody
     public Optional<Ad> viewAd(@PathVariable("id") int id){

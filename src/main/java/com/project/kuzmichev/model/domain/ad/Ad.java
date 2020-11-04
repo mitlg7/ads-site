@@ -25,7 +25,7 @@ public class Ad  {
     @Column(length = 2048)
     private String description;
 
-    private float сost;
+    private float cost;
 
     @Temporal(TemporalType.DATE)
     private Date date;
