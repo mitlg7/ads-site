@@ -57,6 +57,8 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public boolean createAd(Ad ad) {
+        ad.setDate(new Date());
+        ad.setAdStatus(AdStatus.CREATED);
         adRepository.save(ad);
         return true;
     }
