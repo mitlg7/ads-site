@@ -5,6 +5,7 @@ import com.project.kuzmichev.model.domain.ad.AdStatus;
 import com.project.kuzmichev.model.repository.AdRepository;
 import com.project.kuzmichev.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -56,6 +57,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
+    @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
     public boolean createAd(Ad ad) {
         ad.setDate(new Date());
         ad.setAdStatus(AdStatus.CREATED);
@@ -64,6 +66,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
+    @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
     public boolean deleteAd(int id) {
 
         return true;
@@ -71,6 +74,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public boolean setStatusAd(Ad ad, AdStatus adStatus) {
         Ad a = adRepository.findById(ad.getId()).get();
         a.setAdStatus(adStatus);
@@ -80,6 +84,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
+    @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
     public boolean updateAd(Ad ad) {
         adRepository.save(ad);
         return true;

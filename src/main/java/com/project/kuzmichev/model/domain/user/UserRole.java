@@ -1,6 +1,13 @@
 package com.project.kuzmichev.model.domain.user;
 
-public enum UserRole {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum UserRole implements GrantedAuthority {
     ADMIN,
-    CLIENT
+    CLIENT;
+
+    @Override
+    public String getAuthority() {
+        return this.name();
+    }
 }
