@@ -21,7 +21,6 @@ public class User {
     private int id;
     @NotBlank
     private String username;
-    @NotBlank
     private String password;
     @NotBlank
     private String email;
@@ -33,7 +32,6 @@ public class User {
     private String secondName;
     @NotBlank
     private String patronymic;
-    @NotBlank
     private String avatar;
 
     @Temporal(value = TemporalType.DATE)
