@@ -10,8 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("https://alito64.herokuapp.com",
-                        "http://alito64.herokuapp.com",
-                        "alito64.herokuapp.com")
+                        "http://alito64.herokuapp.com")
                 .allowedMethods("*");
     }
 }
