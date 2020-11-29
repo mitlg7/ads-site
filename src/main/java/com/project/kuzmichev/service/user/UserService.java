@@ -12,5 +12,6 @@ public interface UserService {
     User getUserByUsername(String username);
     List<User> getAllUsersByRole(UserRole userRole);
     boolean createUser(User user);
+    boolean save(User user);
 
 }

@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 @Entity
@@ -18,32 +20,51 @@ public class Ad  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private int userId;
+    @NotBlank
+    private String username;
+    @NotBlank
     private String name;
+    @NotBlank
     private String address;
 
+    @NotBlank
     @Column(length = 2048)
     private String description;
 
+    @NotNull
     private float cost;
 
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @ElementCollection
-    @OrderColumn(name = "ad_id")
-    private Set<String> photos = new HashSet<>();
+    @Column(length = 2048)
+    private String photo;
 
     @Enumerated(EnumType.STRING)
     private AdStatus adStatus;
 
+    
     @Enumerated(EnumType.STRING)
     private AdCategory adCategory;
+
 
     @Enumerated(EnumType.STRING)
     private AdType adType;
 
-
-
-
+    @Override
+    public String toString() {
+        return "Ad{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", description='" + description + '\'' +
+                ", cost=" + cost +
+                ", date=" + date +
+                ", photo='" + photo + '\'' +
+                ", adStatus=" + adStatus +
+                ", adCategory=" + adCategory +
+                ", adType=" + adType +
+                '}';
+    }
 }

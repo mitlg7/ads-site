@@ -1,11 +1,12 @@
 package com.project.kuzmichev.model.domain.user;
 
-import com.project.kuzmichev.model.domain.ad.Ad;
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.*;
 
 @Entity
@@ -18,13 +19,21 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @NotBlank
     private String username;
+    @NotBlank
     private String password;
+    @NotBlank
     private String email;
+    @NotBlank
     private String phone;
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String secondName;
+    @NotBlank
     private String patronymic;
+    @NotBlank
     private String avatar;
 
     @Temporal(value = TemporalType.DATE)
@@ -32,9 +41,6 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Ad> ads = new ArrayList<>();
 
     @Override
     public int hashCode(){
@@ -72,7 +78,6 @@ public class User {
                 ", avatar='" + avatar + '\'' +
                 ", birthday=" + birthday +
                 ", userRole=" + userRole +
-                ", ads=" + ads +
                 '}';
     }
 }

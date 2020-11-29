@@ -10,9 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AdRepository extends JpaRepository<Ad, Integer>, JpaSpecificationExecutor<Ad> {
-    List<Ad> findByUserId(int userId);
+    List<Ad> findByUsername(String username);
     List<Ad> findByNameContainingIgnoreCase(String name);
     List<Ad> findByDateBetween(Date start,Date end);
+    Ad deleteById(int id);
     Optional<Ad> findById(int id);
     Ad findByAdStatus(AdStatus adStatus);
 

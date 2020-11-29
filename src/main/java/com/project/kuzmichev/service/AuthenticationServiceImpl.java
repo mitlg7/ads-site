@@ -5,12 +5,15 @@ import com.project.kuzmichev.model.domain.user.UserRole;
 import com.project.kuzmichev.model.repository.UserRepository;
 import com.project.kuzmichev.security.AuthenticationResponse;
 import com.project.kuzmichev.security.JwtTokenProvider;
+import com.project.kuzmichev.service.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService{
+    @Autowired
+    private EmailService emailService;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -26,21 +29,21 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     }
     @Override
     public AuthenticationResponse register(User user) {
-        System.out.println(user.getPassword());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        System.out.println(user.getPassword());
         user.setUserRole(UserRole.CLIENT);
         userRepository.save(user);
         String token = tokenProvider.generateToken(user.getUsername());
-
+        emailService.sendSimpleMessage(user.getEmail()
+                ,"Успешная регистрация",
+                "Добро пожаловать на сайт Alito64!\n" +
+                "На нашем сайте вы можете быстро и выгодно купить или продать вещи\n" +
+                "Загрузи свою первое объявление прямо сейчас !");
         return new AuthenticationResponse(user, token);
     }
 
     @Override
     public boolean canLogin(User logged) {
         User user = userRepository.findByUsername(logged.getUsername());
-        System.out.println(user.toString());
-        System.out.println(isPasswordMatches(logged.getPassword(),user.getPassword()));
         return user != null && isPasswordMatches(logged.getPassword(), user.getPassword());
     }
     private boolean isPasswordMatches(String unencodedPassword, String encodedPassword) {

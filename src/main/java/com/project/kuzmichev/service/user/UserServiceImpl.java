@@ -40,4 +40,11 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return true;
     }
+
+    @Override
+    public boolean save(User user) {
+        userRepository.save(user);
+        return true;
+    }
+
 }

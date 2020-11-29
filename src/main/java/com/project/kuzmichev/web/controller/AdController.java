@@ -2,12 +2,19 @@ package com.project.kuzmichev.web.controller;
 
 
 import com.project.kuzmichev.model.domain.ad.Ad;
+import com.project.kuzmichev.model.domain.ad.AdStatus;
+import com.project.kuzmichev.service.ad.AdService;
 import com.project.kuzmichev.service.ad.AdServiceImpl;
+import com.project.kuzmichev.service.email.EmailServiceImpl;
+import com.project.kuzmichev.utils.AdFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,29 +24,33 @@ import java.util.Optional;
 public class AdController {
 
     @Autowired
-    private AdServiceImpl adServiceImpl;
+    private AdService adService;
 
-
+    @Autowired
+    private EmailServiceImpl emailService;
 
     @GetMapping("/{id:\\d+}")
     @ResponseBody
     public Optional<Ad> viewAd(@PathVariable("id") int id){
-        return adServiceImpl.getAdById(id);
+        return adService.getAdById(id);
     }
-
-
 
     @GetMapping("/all")
     @ResponseBody
-    @PreAuthorize("hasRole('CLIENT')")
-    public List<Ad> views(){
-        return adServiceImpl.getAllAds();
+    public List<Ad> views(AdFilter adFilter){
+        if (adFilter.isEmpty())
+            return adService.getAllAds();
+        else
+            return adService.getAllAdsByFilter(adFilter);
     }
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity createAd(Ad ad){
-        if(adServiceImpl.createAd(ad))
+    @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
+    public ResponseEntity createAd(@Valid @RequestBody Ad ad, BindingResult bindingResult){
+        if(bindingResult.hasErrors())
+            return  ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        if(adService.createAd(ad))
             return ResponseEntity.ok().body("Объявление успешно создано");
         else
             return ResponseEntity.badRequest().body("Не удалось создать объявление");
@@ -47,18 +58,21 @@ public class AdController {
 
     @DeleteMapping("/{id:\\d+}")
     @ResponseBody
+    @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
     public ResponseEntity deleteAd(@PathVariable("id") int id){
-        if( adServiceImpl.deleteAd(id))
+        if( adService.deleteAd(id))
             return ResponseEntity.ok().body("Объявление успешно удалено");
         else
             return ResponseEntity.badRequest().body("Не удалось удалить объявление");
-
     }
 
     @PutMapping("/{id:\\d+}")
     @ResponseBody
-    public ResponseEntity updateAd(@PathVariable("id") int id, @RequestParam  Ad ad){
-        if( adServiceImpl.updateAd(ad))
+    @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
+    public ResponseEntity updateAd(@PathVariable("id") int id,@Valid @RequestParam  Ad ad, BindingResult bindingResult){
+        if(bindingResult.hasErrors())
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        if( adService.updateAd(ad))
             return ResponseEntity.ok().body("Объявление успешно обновлено");
         else
             return ResponseEntity.badRequest().body("Не удалось обновить объявление");
@@ -66,7 +80,18 @@ public class AdController {
 
     @GetMapping("/search")
     @ResponseBody
+    @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
     public List<Ad> searchByName(@RequestParam("name") String name){
-        return adServiceImpl.searchAdByName(name);
+        return adService.searchAdByName(name);
     }
+
+    @PutMapping("/set/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity setStatus(@RequestBody HashMap<String,String> map){
+        Ad ad = adService.getAdById(Integer.valueOf(map.get("adId"))).get();
+        ad.setAdStatus(AdStatus.valueOf(map.get("adStatus")));
+        adService.updateAd(ad);
+        return ResponseEntity.ok().body("ok");
+    }
+
 }

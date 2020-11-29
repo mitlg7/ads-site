@@ -2,8 +2,11 @@ package com.project.kuzmichev.service.ad;
 
 import com.project.kuzmichev.model.domain.ad.Ad;
 import com.project.kuzmichev.model.domain.ad.AdStatus;
+import com.project.kuzmichev.model.domain.user.User;
 import com.project.kuzmichev.model.repository.AdRepository;
 import com.project.kuzmichev.model.repository.UserRepository;
+import com.project.kuzmichev.service.email.EmailService;
+import com.project.kuzmichev.utils.AdFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static com.project.kuzmichev.model.repository.FilmFilterSpecification.*;
+
 @Service
 public class AdServiceImpl implements AdService {
 
@@ -19,6 +24,8 @@ public class AdServiceImpl implements AdService {
     private UserRepository userRepository;
     @Autowired
     private AdRepository adRepository;
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public List<Ad> getAllAds() {
@@ -26,8 +33,19 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public List<Ad> getAllAdsByUserId(int userId) {
-        return adRepository.findByUserId(userId);
+    public List<Ad> getAllAdsByFilter(AdFilter filter) {
+        System.out.println("getAllAdsByFilter");
+        List <Ad> list =adRepository.findAll(byAdCategory(filter.getAdCategory())
+                .and(byAdType(filter.getAdType()))
+                .and(greaterThanMinCost(filter.getMinCost()))
+                .and(lessThanMaxCost(filter.getMaxCost())));
+        System.out.println(list.toString());
+        return list;
+    }
+
+    @Override
+    public List<Ad> getAllAdsByUsername(String username) {
+        return adRepository.findByUsername(username);
     }
 
     @Override
@@ -68,7 +86,7 @@ public class AdServiceImpl implements AdService {
     @Override
     @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
     public boolean deleteAd(int id) {
-
+        adRepository.deleteById(id);
         return true;
 
     }
@@ -79,6 +97,12 @@ public class AdServiceImpl implements AdService {
         Ad a = adRepository.findById(ad.getId()).get();
         a.setAdStatus(adStatus);
         adRepository.save(a);
+        User user = userRepository.findByUsername(a.getUsername());
+        emailService.sendSimpleMessage(user.getEmail(),
+                "Статус вашего объявление изменился",
+                "Здравствуйте, " + user.getFirstName() + " " + user.getSecondName() + ".\n"+
+                "Статус вашего объявления <"+ a.getName() +"> изменился на " + adStatus.toString() +".\n"+
+                "Следите за статусом вашего объявления в личном кабинете.");
         return true;
 
     }
