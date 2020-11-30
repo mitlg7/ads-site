@@ -47,7 +47,7 @@ public class UserController {
         own.setBirthday(user.getBirthday());
         own.setEmail(user.getEmail());
         own.setFirstName(user.getFirstName());
-        own.setSecondName(user.getSecondName());
+        own.setSecondName("Иванов");
         own.setPatronymic(user.getPatronymic());
         own.setPhone(user.getPhone());
         userService.save(own);
