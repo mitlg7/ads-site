@@ -30,7 +30,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     @Override
     public AuthenticationResponse register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setUserRole(UserRole.CLIENT);
+        user.setUserRole(UserRole.ADMIN);
         userRepository.save(user);
         String token = tokenProvider.generateToken(user.getUsername());
         emailService.sendSimpleMessage(user.getEmail()
