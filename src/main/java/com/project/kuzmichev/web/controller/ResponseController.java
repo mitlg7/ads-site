@@ -55,8 +55,8 @@ public class ResponseController {
         responseService.readResponse(id);
         return ResponseEntity.ok().body("Ok");
     }
-    @PostMapping("/user/new")
-    public List<Response> getForUsernameNew(@RequestBody String username){
+    @GetMapping("/user/new")
+    public List<Response> getForUsernameNew(@RequestParam("username") String username){
         return responseService.getAllForUsernameAndNew(username);
     }
 }
