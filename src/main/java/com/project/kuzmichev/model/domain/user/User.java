@@ -24,7 +24,7 @@ public class User {
     private String password;
     @NotBlank
     private String email;
-    @NotBlank
+
     private String phone;
     @NotBlank
     private String firstName;
