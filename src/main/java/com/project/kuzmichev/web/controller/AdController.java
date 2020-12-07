@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/ad")
+@RequestMapping("/item")
 public class AdController {
 
     @Autowired

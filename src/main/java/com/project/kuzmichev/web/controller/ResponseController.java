@@ -45,7 +45,7 @@ public class ResponseController {
         return responseService.getAllForUsername(username);
     }
 
-    @GetMapping("/ad")
+    @GetMapping("/item")
     public List<Response> getByAdId(@RequestParam("id") int id){
         return responseService.getAllByAdId(id);
     }

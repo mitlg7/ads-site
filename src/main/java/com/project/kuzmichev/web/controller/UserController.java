@@ -31,7 +31,7 @@ public class UserController {
         return userService.getUserByUsername(username);
     }
 
-    @GetMapping("/{username}/ads")
+    @GetMapping("/{username}/items")
     @ResponseBody
     public List<Ad> adsByUser(@PathVariable String username){
         return adService.getAllAdsByUsername(username);
