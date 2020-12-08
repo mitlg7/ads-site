@@ -2,6 +2,7 @@ package com.project.kuzmichev.model.repository;
 
 import com.project.kuzmichev.model.domain.ad.Ad;
 import com.project.kuzmichev.model.domain.ad.AdCategory;
+import com.project.kuzmichev.model.domain.ad.AdStatus;
 import com.project.kuzmichev.model.domain.ad.AdType;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -33,6 +34,16 @@ public class FilmFilterSpecification {
             return null;
         };
     }
+
+    public static Specification<Ad> byAdStatus(AdStatus adStatus) {
+        return (Specification<Ad>) (root, criteriaQuery, criteriaBuilder) -> {
+            if(adStatus != null) {
+                return criteriaBuilder.equal(root.get("adStatus"), adStatus);
+            }
+            return null;
+        };
+    }
+
 
     public static Specification<Ad> lessThanMaxCost(float maxCost) {
         return (Specification<Ad>) (root, criteriaQuery, criteriaBuilder) -> {

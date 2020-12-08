@@ -29,7 +29,7 @@ public class ResponseController {
         if(responseService.createResponse(resp))
             return ResponseEntity.ok().body("Ok");
         else
-            return ResponseEntity.badRequest().body("Что то пошло не так");
+            return ResponseEntity.badRequest().body("Статус данного объявления не позволяет оставить отклик.");
     }
 
     @DeleteMapping

@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface AdService {
     List<Ad> getAllAds();
+    List<Ad> getAllAdsByAdmin();
     List<Ad> getAllAdsByFilter(AdFilter adFilter);
     List<Ad> getAllAdsByUsername(String username);
     List<Ad> getAllAdsByStatus(AdStatus adStatus);

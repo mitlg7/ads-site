@@ -44,6 +44,13 @@ public class AdController {
             return adService.getAllAdsByFilter(adFilter);
     }
 
+    @GetMapping("admin/all")
+    @ResponseBody
+    public List<Ad> viewsAdmin(){
+            return adService.getAllAdsByAdmin();
+
+    }
+
     @PostMapping
     @ResponseBody
     @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")

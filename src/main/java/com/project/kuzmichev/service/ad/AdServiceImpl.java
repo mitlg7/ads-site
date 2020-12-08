@@ -33,13 +33,19 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
+    public List<Ad> getAllAdsByAdmin() {
+        List<Ad> list = adRepository.findAll();
+        return list;
+    }
+
+    @Override
     public List<Ad> getAllAdsByFilter(AdFilter filter) {
         System.out.println("getAllAdsByFilter");
         List <Ad> list =adRepository.findAll(byAdCategory(filter.getAdCategory())
                 .and(byAdType(filter.getAdType()))
+                .and(byAdStatus(AdStatus.ACTIVELY))
                 .and(greaterThanMinCost(filter.getMinCost()))
                 .and(lessThanMaxCost(filter.getMaxCost())));
-        System.out.println(list.toString());
         return list;
     }
 

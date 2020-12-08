@@ -2,6 +2,7 @@ package com.project.kuzmichev.service.response;
 
 import com.project.kuzmichev.model.domain.Response;
 import com.project.kuzmichev.model.domain.ad.Ad;
+import com.project.kuzmichev.model.domain.ad.AdStatus;
 import com.project.kuzmichev.model.domain.user.User;
 import com.project.kuzmichev.model.repository.AdRepository;
 import com.project.kuzmichev.model.repository.ResponseRepository;
@@ -63,6 +64,10 @@ public class ResponseServiceImpl implements ResponseService{
 
     @Override
     public boolean createResponse(Response response) {
+        Ad ad = adRepository.findById(response.getIdAd()).orElse(null);
+        if(ad != null)
+            if(!ad.getAdStatus().equals(AdStatus.ACTIVELY))
+                return false;
         response.setDate(new Date());
         response.setRead(false);
         responseRepository.save(response);
