@@ -44,7 +44,7 @@ public class AdController {
             return adService.getAllAdsByFilter(adFilter);
     }
 
-    @GetMapping("admin/all")
+    @GetMapping("/admin/all")
     @ResponseBody
     public List<Ad> viewsAdmin(){
             return adService.getAllAdsByAdmin();

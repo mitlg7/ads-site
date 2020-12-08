@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.project.kuzmichev.model.repository.FilmFilterSpecification.*;
 
@@ -71,7 +72,9 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public List<Ad> searchAdByName(String request) {
-        return adRepository.findByNameContainingIgnoreCase(request);
+        return adRepository.findByNameContainingIgnoreCase(request).stream()
+                .filter(x -> x.getAdStatus().equals(AdStatus.ACTIVELY))
+                .collect(Collectors.toList());
     }
 
     @Override
