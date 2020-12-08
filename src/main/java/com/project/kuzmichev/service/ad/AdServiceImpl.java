@@ -29,7 +29,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public List<Ad> getAllAds() {
-        return adRepository.findAll();
+        return adRepository.findAll(byAdStatus(AdStatus.ACTIVELY));
     }
 
     @Override
@@ -40,7 +40,6 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public List<Ad> getAllAdsByFilter(AdFilter filter) {
-        System.out.println("getAllAdsByFilter");
         List <Ad> list =adRepository.findAll(byAdCategory(filter.getAdCategory())
                 .and(byAdType(filter.getAdType()))
                 .and(byAdStatus(AdStatus.ACTIVELY))
