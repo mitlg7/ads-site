@@ -45,7 +45,7 @@ public class ResponseServiceImpl implements ResponseService{
 
     @Override
     public List<Response> getAllForUsernameAndNew(String username){
-        List<Response> list = getAllByUsername(username).stream()
+        List<Response> list = getAllForUsername(username).stream()
                 .filter( (x) -> !x.isRead())
                 .sorted(Comparator.comparing(Response::getDate))
                 .collect(Collectors.toList());
