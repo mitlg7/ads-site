@@ -1,6 +1,5 @@
 package com.project.kuzmichev.model.domain.user;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,6 +32,11 @@ public class User {
     @NotBlank
     private String patronymic;
     private String avatar;
+    private boolean distribution;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "subscriptions_id", referencedColumnName = "id")
+    private Subscriptions subscriptions;
 
     @Temporal(value = TemporalType.DATE)
     private Date birthday;
@@ -61,7 +65,6 @@ public class User {
         return new ArrayList<UserRole>(Collections.singleton(userRole));
     }
 
-
     @Override
     public String toString() {
         return "User{" +
@@ -74,6 +77,8 @@ public class User {
                 ", secondName='" + secondName + '\'' +
                 ", patronymic='" + patronymic + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", distribution=" + distribution +
+                ", subscriptions=" + subscriptions +
                 ", birthday=" + birthday +
                 ", userRole=" + userRole +
                 '}';

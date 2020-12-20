@@ -43,13 +43,13 @@ public class UserController {
         if (bindingResult.hasErrors())
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         User own = userService.getUserByUsername(user.getUsername());
-        System.out.println(user.toString());
         own.setBirthday(user.getBirthday());
         own.setEmail(user.getEmail());
         own.setFirstName(user.getFirstName());
         own.setSecondName(user.getSecondName());
         own.setPatronymic(user.getPatronymic());
         own.setPhone(user.getPhone());
+        own.setDistribution(user.isDistribution());
         userService.save(own);
         return ResponseEntity.ok().body("ok");
     }

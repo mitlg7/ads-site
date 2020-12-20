@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface UserService {
     List<User> getAllUsers();
+    List<User> getAllUsersForDistribution();
     Optional<User> getUserById(int id);
     User getUserByUsername(String username);
     List<User> getAllUsersByRole(UserRole userRole);

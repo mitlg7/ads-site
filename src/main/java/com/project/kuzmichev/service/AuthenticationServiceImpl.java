@@ -1,5 +1,6 @@
 package com.project.kuzmichev.service;
 
+import com.project.kuzmichev.model.domain.user.Subscriptions;
 import com.project.kuzmichev.model.domain.user.User;
 import com.project.kuzmichev.model.domain.user.UserRole;
 import com.project.kuzmichev.model.repository.UserRepository;
@@ -31,6 +32,8 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     public AuthenticationResponse register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUserRole(UserRole.CLIENT);
+        user.setSubscriptions(new Subscriptions());
+        user.setDistribution(true);
         userRepository.save(user);
         String token = tokenProvider.generateToken(user.getUsername());
         emailService.sendSimpleMessage(user.getEmail()
