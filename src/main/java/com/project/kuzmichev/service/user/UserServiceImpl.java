@@ -21,6 +21,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getAllUsersForDistribution() {
+        return userRepository.findByDistribution(true);
+    }
+
+
+    @Override
     public Optional<User> getUserById(int id) {
         return userRepository.findById(id);
     }
@@ -43,6 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean save(User user) {
+
         userRepository.save(user);
         return true;
     }

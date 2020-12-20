@@ -1,7 +1,10 @@
 package com.project.kuzmichev.service.ad;
 
 import com.project.kuzmichev.model.domain.ad.Ad;
+import com.project.kuzmichev.model.domain.ad.AdCategory;
 import com.project.kuzmichev.model.domain.ad.AdStatus;
+import com.project.kuzmichev.model.domain.ad.AdType;
+import com.project.kuzmichev.model.domain.user.Subscriptions;
 import com.project.kuzmichev.model.domain.user.User;
 import com.project.kuzmichev.model.repository.AdRepository;
 import com.project.kuzmichev.model.repository.UserRepository;
@@ -11,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.project.kuzmichev.model.repository.FilmFilterSpecification.*;
@@ -55,6 +56,21 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
+    public List<Ad> getFiveAdsByAdCategory(AdCategory adCategory) {
+        return  adRepository.findTop5ByAdCategory(adCategory);
+    }
+
+    @Override
+    public List<Ad> getFiveAdsByAdType(AdType adType) {
+        return adRepository.findTop5ByAdType(adType);
+    }
+
+    @Override
+    public List<Ad> getFiveAdsByAdTypeAndByAdCategory(AdType adType, AdCategory adCategory) {
+        return adRepository.findTop5ByAdTypeAndAdCategory(adType,adCategory);
+    }
+
+    @Override
     public List<Ad> getAllAdsByStatus(AdStatus adStatus) {
         return (List<Ad>) adRepository.findByAdStatus(adStatus);
     }
@@ -71,10 +87,28 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public List<Ad> searchAdByName(String request) {
-        return adRepository.findByNameContainingIgnoreCase(request).stream()
+    public List<Ad> searchAdByName(String username, String request) {
+        User user = userRepository.findByUsername(username);
+        List<Ad> list = adRepository.findByNameContainingIgnoreCase(request).stream()
                 .filter(x -> x.getAdStatus().equals(AdStatus.ACTIVELY))
                 .collect(Collectors.toList());
+
+
+        if(!list.isEmpty()){
+            TreeMap<AdCategory, Long> map1 =  new TreeMap<>(list.stream().collect(Collectors.groupingBy(Ad::getAdCategory, Collectors.counting())));
+            TreeMap<AdType, Long> map2 =  new TreeMap<>(list.stream().collect(Collectors.groupingBy(Ad::getAdType, Collectors.counting())));
+
+            user.getSubscriptions().setAdCategory(map1.firstKey());
+            user.getSubscriptions().setAdType(map2.firstKey());
+
+            if (user.getSubscriptions().getLastSend()== null) //Для того что бы можно было отправить, когда еще не было ни одной рассылки
+                user.getSubscriptions().setLastSend(new Date());
+
+            System.out.println(user.getSubscriptions());
+            userRepository.save(user);
+        }
+
+        return list;
     }
 
     @Override
@@ -122,4 +156,5 @@ public class AdServiceImpl implements AdService {
         return true;
 
     }
+
 }

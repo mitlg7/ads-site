@@ -3,6 +3,7 @@ package com.project.kuzmichev.web.controller;
 
 import com.project.kuzmichev.model.domain.ad.Ad;
 import com.project.kuzmichev.model.domain.ad.AdStatus;
+import com.project.kuzmichev.model.domain.user.User;
 import com.project.kuzmichev.service.ad.AdService;
 import com.project.kuzmichev.service.ad.AdServiceImpl;
 import com.project.kuzmichev.service.email.EmailServiceImpl;
@@ -10,10 +11,14 @@ import com.project.kuzmichev.utils.AdFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -55,6 +60,8 @@ public class AdController {
     @ResponseBody
     @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
     public ResponseEntity createAd(@Valid @RequestBody Ad ad, BindingResult bindingResult){
+        System.out.println(bindingResult.getAllErrors());
+        System.out.println(ad);
         if(bindingResult.hasErrors())
             return  ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         if(adService.createAd(ad))
@@ -88,8 +95,8 @@ public class AdController {
     @GetMapping("/search")
     @ResponseBody
     @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
-    public List<Ad> searchByName(@RequestParam("name") String name){
-        return adService.searchAdByName(name);
+    public List<Ad> searchByName(@RequestParam("name") String name, Authentication authentication){
+        return adService.searchAdByName(authentication.getName(),name);
     }
 
     @PutMapping("/set/status")
